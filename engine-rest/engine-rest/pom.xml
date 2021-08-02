@@ -299,6 +299,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
+          <trimStackTrace>false</trimStackTrace>
           <classpathDependencyExcludes>
             <classpathDependencyExclude>org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_1.1_spec</classpathDependencyExclude>
           </classpathDependencyExcludes>
