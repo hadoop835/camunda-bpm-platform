@@ -16,9 +16,6 @@
  */
 package org.mockito.configuration;
 
-import org.mockito.ReturnValues;
-import org.mockito.stubbing.Answer;
-
 public class MockitoConfiguration extends DefaultMockitoConfiguration {
 
   @Override

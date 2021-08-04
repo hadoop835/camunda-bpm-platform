@@ -19,6 +19,7 @@ package org.camunda.bpm.engine.rest.spi.impl;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -40,6 +41,12 @@ import org.camunda.bpm.engine.impl.variable.ValueTypeResolverImpl;
 import org.camunda.bpm.engine.rest.helper.MockProvider;
 import org.camunda.bpm.engine.rest.spi.ProcessEngineProvider;
 import org.camunda.bpm.engine.variable.type.ValueTypeResolver;
+import org.mockito.Mockito;
+import org.mockito.invocation.DescribedInvocation;
+import org.mockito.listeners.InvocationListener;
+import org.mockito.listeners.MethodInvocationReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MockedProcessEngineProvider implements ProcessEngineProvider {
 
@@ -51,8 +58,20 @@ public class MockedProcessEngineProvider implements ProcessEngineProvider {
     cachedEngines = new HashMap<String, ProcessEngine>();
   }
 
+  private static class LoggerListener implements InvocationListener {
+
+    private static Logger logger = LoggerFactory.getLogger(LoggerListener.class);
+
+    @Override
+    public void reportInvocation(MethodInvocationReport methodInvocationReport) {
+      DescribedInvocation invocation = methodInvocationReport.getInvocation();
+
+      logger.debug("Thread '" + Thread.currentThread().getName() + "' called " + invocation);
+    }
+  }
+
   private ProcessEngine mockProcessEngine(String engineName) {
-    ProcessEngine engine = mock(ProcessEngine.class);
+    ProcessEngine engine = mock(ProcessEngine.class, Mockito.withSettings().invocationListeners(new LoggerListener()));
     when(engine.getName()).thenReturn(engineName);
     mockServices(engine);
     mockProcessEngineConfiguration(engine);

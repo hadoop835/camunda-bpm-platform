@@ -51,8 +51,10 @@ import org.camunda.bpm.engine.rest.ProcessDefinitionRestService;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 import org.camunda.bpm.engine.rest.helper.MockProvider;
 import org.camunda.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.internal.debugging.MockitoDebuggerImpl;
 
 import io.restassured.http.ContentType;
 
@@ -71,6 +73,11 @@ public abstract class AbstractAuthenticationFilterTest extends AbstractRestServi
 
   @Before
   public void setup() {
+//    Thread t = new Thread(new MyRunnable());
+//    t.start();
+
+    System.out.println(this.getClass().getName() + ": @Before beginning");
+
     authorizationServiceMock = mock(AuthorizationServiceImpl.class);
     identityServiceMock = mock(IdentityServiceImpl.class);
     repositoryServiceMock = mock(RepositoryService.class);
@@ -94,6 +101,20 @@ public abstract class AbstractAuthenticationFilterTest extends AbstractRestServi
     ProcessDefinitionQuery mockQuery = mock(ProcessDefinitionQuery.class);
     when(repositoryServiceMock.createProcessDefinitionQuery()).thenReturn(mockQuery);
     when(mockQuery.list()).thenReturn(mockDefinitions);
+
+    System.out.println(this.getClass().getName() + ": @Before done");
+  }
+
+  public static class MyRunnable implements Runnable {
+
+    @Override
+    public void run() {
+      System.out.println("Waiting");
+
+      processEngine.getIdentityService();
+
+    }
+
   }
 
   protected List<String> setupGroupQueryMock(List<Group> groups) {
