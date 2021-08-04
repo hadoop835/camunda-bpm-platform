@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
+import java.util.logging.Level;
 
 import org.camunda.bpm.util.SeleniumScreenshotRule;
 import org.junit.After;
@@ -31,6 +32,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.logging.LogType;
+import org.openqa.selenium.logging.LoggingPreferences;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest {
@@ -60,6 +64,11 @@ public class AbstractWebappUiIntegrationTest extends AbstractWebIntegrationTest 
 
     ChromeOptions chromeOptions = new ChromeOptions();
     chromeOptions.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200");
+
+    LoggingPreferences logPrefs = new LoggingPreferences();
+    logPrefs.enable(LogType.PERFORMANCE, Level.INFO);
+    chromeOptions.setCapability(CapabilityType.LOGGING_PREFS, logPrefs);
+    chromeOptions.setCapability("goog:loggingPrefs", logPrefs);
 
     driver = new ChromeDriver(chromeDriverService, chromeOptions);
   }

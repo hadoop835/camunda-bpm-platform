@@ -19,10 +19,14 @@ package org.camunda.bpm;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.List;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.textToBePresentInElementLocated;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
@@ -77,7 +81,15 @@ public class LoginIT extends AbstractWebappUiIntegrationTest {
       loginToTasklist();
     } catch (WebDriverException e) {
       loginToTasklist();
+    } finally {
+      List<LogEntry> entries = driver.manage().logs().get(LogType.PERFORMANCE).getAll();
+      System.out.println(entries.size() + " " + LogType.PERFORMANCE + " log entries found");
+      for (LogEntry entry : entries) {
+        System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
+      }
     }
+
+
   }
 
   public void loginToTasklist() {
