@@ -66,7 +66,17 @@ public class MockedProcessEngineProvider implements ProcessEngineProvider {
     public void reportInvocation(MethodInvocationReport methodInvocationReport) {
       DescribedInvocation invocation = methodInvocationReport.getInvocation();
 
-      logger.debug("Thread '" + Thread.currentThread().getName() + "' called " + invocation);
+      String threadName = Thread.currentThread().getName();
+
+      if ("main".equals(threadName)) {
+        logger.debug("Thread '" + threadName + "' called " + invocation);
+      }
+      else
+      {
+        logger.debug("Thread '" + threadName + "' called " + invocation,
+            new Exception("Dummy exception to see the stacktrace"));
+
+      }
     }
   }
 

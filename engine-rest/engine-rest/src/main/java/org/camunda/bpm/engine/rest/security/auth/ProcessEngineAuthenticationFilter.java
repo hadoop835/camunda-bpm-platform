@@ -40,6 +40,8 @@ import org.camunda.bpm.engine.rest.dto.ExceptionDto;
 import org.camunda.bpm.engine.rest.exception.InvalidRequestException;
 import org.camunda.bpm.engine.rest.impl.NamedProcessEngineRestServiceImpl;
 import org.camunda.bpm.engine.rest.util.EngineUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -107,12 +109,17 @@ public class ProcessEngineAuthenticationFilter implements Filter {
     servletPathPrefix = filterConfig.getInitParameter(SERVLET_PATH_PREFIX);
   }
 
+  private static Logger logger = LoggerFactory.getLogger(ProcessEngineAuthenticationFilter.class);
+
   @Override
   public void doFilter(ServletRequest request, ServletResponse response,
       FilterChain chain) throws IOException, ServletException {
 
+
     HttpServletRequest req = (HttpServletRequest) request;
     HttpServletResponse resp = (HttpServletResponse) response;
+
+    logger.debug("Handling request for URL: " + req.getRequestURI());
 
     String servletPath = servletPathPrefix;
     if (servletPath == null) {
